@@ -9,6 +9,8 @@ from django.contrib.auth import get_user_model
 from . import serializers
 from .send_email import send_confirmation_email,send_reset_password
 from shop_api.tasks import send_email_task
+from .send_email import send_html_email
+
 
 User = get_user_model()
 class RegistrationView(APIView):
@@ -86,6 +88,7 @@ class FollowSpamApi(APIView):
         serializer = serializers.SpamViewSerializer(data = request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        send_html_email()
         return Response('Followed to spam!', status=200)
 
 
